@@ -21,10 +21,13 @@ public class Demo {
 	}
 	
 	public void cost_calculate(int[] gas_amounts) {
+		// initialize the Day 1 to Day 1
 		cost_table[1][1].cost = P;
 		cost_table[1][1].parent_day = -1;
 		cost_table[1][1].parent_dayto = -1;
 		cost_table[1][1].order = true;
+		
+		// initialize the Day 1 to Day n where the amounts of gas is less than L
 		cost_table[1][1].current_L = gas_amounts[0];
 		for(int initial = 2; initial <= n; initial++) {
 			cost_table[1][initial].current_L = gas_amounts[initial - 1];
@@ -38,11 +41,14 @@ public class Demo {
 			else break;
 		}
 		
+		// For the rest of the table we use the left, top, diagonal cells to caclualte the current cell
 		for(int day = 2; day <= n; day++) {
 			for(int dayto = day; dayto <= n; dayto++) {
+				// On the day we make sure to get the current gas in order to increment as we go through
 				if(day == dayto) cost_table[day][dayto].current_L = gas_amounts[dayto - 1];
 				else cost_table[day][dayto].current_L = cost_table[day][dayto - 1].current_L + gas_amounts[dayto -1];
 				
+				// break if current_L is greater than L
 				if(cost_table[day][dayto].current_L > L) continue;
 				
 				opt[LEFT] = P + cost_table[day][dayto - 1].cost;
